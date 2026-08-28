@@ -1,0 +1,1 @@
+Place the five required PDFs in this folder before running ingestion.

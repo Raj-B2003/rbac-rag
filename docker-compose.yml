@@ -1,0 +1,28 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: rbac-rag-ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+
+  api:
+    build: .
+    container_name: rbac-rag-api
+    ports:
+      - "8000:8000"
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_MODEL: qwen2.5:3b
+      DOCS_PATH: /app/docs
+      DB_PATH: /app/chroma_db
+    volumes:
+      - chroma_data:/app/chroma_db
+    depends_on:
+      - ollama
+
+volumes:
+  ollama_data:
+  chroma_data:
